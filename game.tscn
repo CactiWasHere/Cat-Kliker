@@ -1,0 +1,152 @@
+[gd_scene load_steps=25 format=2]
+
+[ext_resource path="res://sprites/cat/base_cat.png" type="Texture" id=1]
+[ext_resource path="res://game.gd" type="Script" id=2]
+[ext_resource path="res://sprites/effect/EffeCt.png" type="Texture" id=3]
+[ext_resource path="res://UI/credits.png" type="Texture" id=4]
+[ext_resource path="res://sprites/cat/base_cat2.png" type="Texture" id=5]
+[ext_resource path="res://mixkit-arcade-game-jump-coin-216.wav" type="AudioStream" id=6]
+[ext_resource path="res://Theme.tres" type="Theme" id=7]
+[ext_resource path="res://mixkit-coins-sound-2003.wav" type="AudioStream" id=8]
+[ext_resource path="res://mixkit-atm-cash-machine-key-press-2841.wav" type="AudioStream" id=9]
+
+[sub_resource type="Gradient" id=2]
+colors = PoolColorArray( 0, 1, 0.296875, 1, 0, 1, 0.976563, 1 )
+
+[sub_resource type="GradientTexture2D" id=3]
+gradient = SubResource( 2 )
+fill_from = Vector2( 0, 0.8375 )
+
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [ ExtResource( 1 ), ExtResource( 5 ) ],
+"loop": true,
+"name": "base_cat",
+"speed": 5.0
+} ]
+
+[sub_resource type="DynamicFontData" id=10]
+font_path = "res://Quinquefive-K7qep.ttf"
+
+[sub_resource type="DynamicFont" id=11]
+size = 10
+font_data = SubResource( 10 )
+
+[sub_resource type="Theme" id=12]
+Label/fonts/font = SubResource( 11 )
+
+[sub_resource type="StyleBoxEmpty" id=4]
+
+[sub_resource type="StyleBoxEmpty" id=5]
+
+[sub_resource type="StyleBoxEmpty" id=6]
+
+[sub_resource type="StyleBoxEmpty" id=7]
+
+[sub_resource type="StyleBoxEmpty" id=8]
+
+[sub_resource type="Theme" id=9]
+Button/styles/disabled = SubResource( 4 )
+Button/styles/focus = SubResource( 5 )
+Button/styles/hover = SubResource( 6 )
+Button/styles/normal = SubResource( 7 )
+Button/styles/pressed = SubResource( 8 )
+
+[sub_resource type="Gradient" id=14]
+colors = PoolColorArray( 1, 0.618164, 0, 1, 0.9375, 0.0769043, 0.0769043, 1 )
+
+[sub_resource type="GradientTexture" id=15]
+gradient = SubResource( 14 )
+
+[sub_resource type="ParticlesMaterial" id=13]
+emission_shape = 1
+emission_sphere_radius = 5.56
+flag_disable_z = true
+gravity = Vector3( 0, -17, 0 )
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+color_ramp = SubResource( 15 )
+
+[node name="game" type="Node"]
+script = ExtResource( 2 )
+
+[node name="Background" type="Sprite" parent="."]
+position = Vector2( 128, 72 )
+scale = Vector2( 4, 2.25 )
+texture = SubResource( 3 )
+
+[node name="cat" type="AnimatedSprite" parent="."]
+position = Vector2( 152, 64 )
+scale = Vector2( 4, 3.875 )
+frames = SubResource( 1 )
+animation = "base_cat"
+
+[node name="Label" type="Label" parent="."]
+margin_left = 184.0
+margin_top = 8.0
+margin_right = 224.0
+margin_bottom = 22.0
+theme = SubResource( 12 )
+
+[node name="Button" type="Button" parent="."]
+margin_left = 128.0
+margin_top = 33.0
+margin_right = 176.0
+margin_bottom = 96.0
+mouse_default_cursor_shape = 3
+theme = SubResource( 9 )
+button_mask = 3
+
+[node name="Timer" type="Timer" parent="."]
+
+[node name="fire" type="Particles2D" parent="."]
+position = Vector2( 112, 56 )
+emitting = false
+amount = 3
+process_material = SubResource( 13 )
+texture = ExtResource( 3 )
+
+[node name="Credits" type="Sprite" parent="."]
+position = Vector2( 173, 15 )
+texture = ExtResource( 4 )
+
+[node name="Shop" type="Node" parent="."]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Shop"]
+margin_left = 8.0
+margin_top = 24.0
+margin_right = 48.0
+margin_bottom = 104.0
+
+[node name="ACF" type="Button" parent="Shop/VBoxContainer"]
+margin_right = 40.0
+margin_bottom = 9.0
+mouse_default_cursor_shape = 3
+theme = ExtResource( 7 )
+
+[node name="MultiKlik" type="Button" parent="Shop/VBoxContainer"]
+margin_top = 13.0
+margin_right = 40.0
+margin_bottom = 22.0
+theme = ExtResource( 7 )
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 6 )
+
+[node name="AudioStreamPlayer2" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 8 )
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+
+[node name="Wait" type="Timer" parent="."]
+
+[node name="AudioStreamPlayer3" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 9 )
+
+[connection signal="button_down" from="Button" to="." method="_on_Button_button_down"]
+[connection signal="button_up" from="Button" to="." method="_on_Button_button_up"]
+[connection signal="pressed" from="Button" to="." method="_on_Button_pressed"]
+[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]
+[connection signal="button_down" from="Shop/VBoxContainer/ACF" to="." method="_on_ACF_button_down"]
+[connection signal="button_down" from="Shop/VBoxContainer/MultiKlik" to="." method="_on_MultiKlik_button_down"]
+[connection signal="timeout" from="Wait" to="." method="_on_Wait_timeout"]
